@@ -2,10 +2,9 @@ package ru.practicum.shareit.item.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
-import ru.practicum.shareit.item.exception.ItemNotFoundException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.Collection;
@@ -29,7 +28,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Optional<Item> getItem(long id) {
         return Optional.of(itemRepository.getItem(id).orElseThrow(() ->
-                new ItemNotFoundException(String.format("Ошибка получения: вещь с id=%d не найдена.", id))));
+                new EntityNotFoundException(String.format("Ошибка получения: вещь с id=%d не найдена.", id))));
     }
 
     @Override
@@ -40,7 +39,7 @@ public class ItemServiceImpl implements ItemService {
     @Override
     public Optional<Item> updateItem(Item item, long id, long ownerId) {
         itemRepository.getItem(id).map(Item::getOwnerId).filter(s -> s == ownerId).orElseThrow(() ->
-                new UserNotFoundException(String.format("Ошибка получения: пользователь с id=%d не найден.", id)));
+                new EntityNotFoundException(String.format("Ошибка получения: пользователь с id=%d не найден.", id)));
         return itemRepository.updateItem(item, id);
     }
 

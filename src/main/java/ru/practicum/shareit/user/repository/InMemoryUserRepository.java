@@ -1,7 +1,7 @@
 package ru.practicum.shareit.user.repository;
 
 import org.springframework.stereotype.Repository;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.model.User;
 
 import java.util.*;
@@ -41,7 +41,7 @@ public class InMemoryUserRepository implements UserRepository {
     @Override
     public Optional<User> updateUser(User user, long id) {
         if (!userMap.containsKey(id)) {
-            throw new UserNotFoundException(String.format("Ошибка получения: пользователь с id=%d не найден.", id));
+            throw new EntityNotFoundException(String.format("Ошибка получения: пользователь с id=%d не найден.", id));
 
         }
 

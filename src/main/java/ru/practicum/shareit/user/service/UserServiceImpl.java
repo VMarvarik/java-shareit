@@ -2,8 +2,8 @@ package ru.practicum.shareit.user.service;
 
 import lombok.AllArgsConstructor;
 import org.springframework.stereotype.Service;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.exception.DuplicateEmailException;
-import ru.practicum.shareit.user.exception.UserNotFoundException;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
 
@@ -27,7 +27,7 @@ public class UserServiceImpl implements UserService {
         if (userRepository.getUser(id).isPresent()) {
             return userRepository.getUser(id);
         } else {
-            throw new UserNotFoundException(String.format("Ошибка получения: пользователь с id=%d не найден.", id));
+            throw new EntityNotFoundException(String.format("Ошибка получения: пользователь с id=%d не найден.", id));
         }
     }
 

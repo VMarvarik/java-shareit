@@ -10,8 +10,7 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.service.UserService;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @RestController
@@ -25,35 +24,35 @@ public class UserController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    Optional<UserDto> addUser(@Valid @RequestBody final UserDto userDto) {
+    UserDto addUser(@Valid @RequestBody UserDto userDto) {
         log.info("Добавление пользователя");
-        return service.addUser(UserMapper.mapToModel(userDto)).map(UserMapper::mapToDto);
+        return service.addUser(UserMapper.mapToModel(userDto)).map(UserMapper::mapToDto).get();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/{id}")
-    Optional<UserDto> getUser(@PathVariable final long id) {
+    UserDto getUser(@PathVariable long id) {
         log.info("Вызов пользователя");
-        return service.getUser(id).map(UserMapper::mapToDto);
+        return service.getUser(id).map(UserMapper::mapToDto).get();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    Collection<UserDto> getUsers() {
+    List<UserDto> getUsers() {
         log.info("Вызов всех пользователей");
         return service.getUsers().stream().map(UserMapper::mapToDto).collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(path = "/{id}")
-    Optional<UserDto> updateUser(@RequestBody final UserDto userDto, @PathVariable final long id) {
+    UserDto updateUser(@RequestBody UserDto userDto, @PathVariable long id) {
         log.info("Обновление пользователя");
-        return service.updateUser(UserMapper.mapToModel(userDto), id).map(UserMapper::mapToDto);
+        return service.updateUser(UserMapper.mapToModel(userDto), id).map(UserMapper::mapToDto).get();
     }
 
     @DeleteMapping(path = "/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    void deleteUser(@PathVariable final long id) {
+    void deleteUser(@PathVariable long id) {
         log.info("Удаление пользователя");
         service.deleteUser(id);
     }

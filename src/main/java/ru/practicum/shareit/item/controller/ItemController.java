@@ -11,8 +11,7 @@ import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
-import java.util.Collection;
-import java.util.Optional;
+import java.util.List;
 import java.util.stream.Collectors;
 
 @Validated
@@ -26,42 +25,42 @@ public class ItemController {
 
     @ResponseStatus(HttpStatus.CREATED)
     @PostMapping
-    public Optional<ItemDto> addItem(@RequestBody @Valid final ItemDto itemDto,
-                                     @RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
+    public ItemDto addItem(@RequestBody @Valid ItemDto itemDto,
+                           @RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
         Item item = ItemMapper.mapToModel(itemDto);
         item.setOwnerId(ownerId);
         log.info("Добавление предмета");
-        return service.addItem(ItemMapper.mapToModel(itemDto), ownerId).map(ItemMapper::mapToDto);
+        return service.addItem(ItemMapper.mapToModel(itemDto), ownerId).map(ItemMapper::mapToDto).get();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/{id}")
-    public Optional<ItemDto> getItem(@PathVariable final long id, @RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
+    public ItemDto getItem(@PathVariable long id, @RequestHeader(name = "X-Sharer-User-Id") long ownerId) {
         log.info("Вызов предмета");
-        return service.getItem(id).map(ItemMapper::mapToDto);
+        return service.getItem(id).map(ItemMapper::mapToDto).get();
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping
-    public Collection<ItemDto> getOwnerItems(@RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
+    public List<ItemDto> getOwnerItems(@RequestHeader(name = "X-Sharer-User-Id") long ownerId) {
         log.info("Поиск предметов по пользователю");
         return service.getOwnerItems(ownerId).stream().map(ItemMapper::mapToDto).collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/search")
-    public Collection<ItemDto> searchAvailableItems(@RequestParam final String text,
-                                                    @RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
+    public List<ItemDto> searchAvailableItems(@RequestParam String text,
+                                              @RequestHeader(name = "X-Sharer-User-Id") long ownerId) {
         log.info("Поиск предметов по тексту");
         return service.searchAvailableItems(text).stream().map(ItemMapper::mapToDto).collect(Collectors.toList());
     }
 
     @ResponseStatus(HttpStatus.OK)
     @PatchMapping(path = "/{itemId}")
-    public Optional<ItemDto> updateItem(@RequestBody final ItemDto itemDto,
-                                        @PathVariable final long itemId,
-                                        @RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
+    public ItemDto updateItem(@RequestBody ItemDto itemDto,
+                              @PathVariable long itemId,
+                              @RequestHeader(name = "X-Sharer-User-Id") long ownerId) {
         log.info("Обновление предмета");
-        return service.updateItem(ItemMapper.mapToModel(itemDto), itemId, ownerId).map(ItemMapper::mapToDto);
+        return service.updateItem(ItemMapper.mapToModel(itemDto), itemId, ownerId).map(ItemMapper::mapToDto).get();
     }
 }
