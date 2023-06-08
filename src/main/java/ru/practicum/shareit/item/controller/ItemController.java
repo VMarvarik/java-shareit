@@ -5,6 +5,9 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
+import ru.practicum.shareit.comment.dto.RequestCommentDto;
+import ru.practicum.shareit.comment.dto.ResponseCommentDto;
+import ru.practicum.shareit.comment.mapper.CommentMapper;
 import ru.practicum.shareit.item.dto.ItemDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
@@ -28,16 +31,15 @@ public class ItemController {
     public ItemDto addItem(@RequestBody @Valid ItemDto itemDto,
                            @RequestHeader(name = "X-Sharer-User-Id") final long ownerId) {
         Item item = ItemMapper.mapToModel(itemDto);
-        item.setOwnerId(ownerId);
         log.info("Добавление предмета");
-        return service.addItem(ItemMapper.mapToModel(itemDto), ownerId).map(ItemMapper::mapToDto).get();
+        return ItemMapper.mapToDto(service.addItem(ItemMapper.mapToModel(itemDto), ownerId));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/{id}")
     public ItemDto getItem(@PathVariable long id, @RequestHeader(name = "X-Sharer-User-Id") long ownerId) {
         log.info("Вызов предмета");
-        return service.getItem(id).map(ItemMapper::mapToDto).get();
+        return ItemMapper.mapToDto(service.getItem(id));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -61,6 +63,15 @@ public class ItemController {
                               @PathVariable long itemId,
                               @RequestHeader(name = "X-Sharer-User-Id") long ownerId) {
         log.info("Обновление предмета");
-        return service.updateItem(ItemMapper.mapToModel(itemDto), itemId, ownerId).map(ItemMapper::mapToDto).get();
+        return ItemMapper.mapToDto(service.updateItem(ItemMapper.mapToModel(itemDto), itemId, ownerId));
+    }
+
+    @PostMapping("{itemId}/comment")
+    public ResponseCommentDto addComment(
+            @RequestHeader("X-Sharer-User-Id") long userId,
+            @PathVariable long itemId,
+            @Valid @RequestBody RequestCommentDto requestCommentDto) {
+        return CommentMapper.toResponseCommentDto
+                (service.addComment(userId, itemId, CommentMapper.fromRequestCommentDtoToModel(requestCommentDto)));
     }
 }

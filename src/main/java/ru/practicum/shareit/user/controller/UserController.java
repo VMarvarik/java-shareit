@@ -26,14 +26,14 @@ public class UserController {
     @PostMapping
     UserDto addUser(@Valid @RequestBody UserDto userDto) {
         log.info("Добавление пользователя");
-        return service.addUser(UserMapper.mapToModel(userDto)).map(UserMapper::mapToDto).get();
+        return UserMapper.mapToDto(service.addUser(UserMapper.mapToModel(userDto)));
     }
 
     @ResponseStatus(HttpStatus.OK)
     @GetMapping(path = "/{id}")
     UserDto getUser(@PathVariable long id) {
         log.info("Вызов пользователя");
-        return service.getUser(id).map(UserMapper::mapToDto).get();
+        return UserMapper.mapToDto(service.getUser(id));
     }
 
     @ResponseStatus(HttpStatus.OK)
@@ -47,7 +47,7 @@ public class UserController {
     @PatchMapping(path = "/{id}")
     UserDto updateUser(@RequestBody UserDto userDto, @PathVariable long id) {
         log.info("Обновление пользователя");
-        return service.updateUser(UserMapper.mapToModel(userDto), id).map(UserMapper::mapToDto).get();
+        return UserMapper.mapToDto(service.updateUser(UserMapper.mapToModel(userDto), id));
     }
 
     @DeleteMapping(path = "/{id}")
