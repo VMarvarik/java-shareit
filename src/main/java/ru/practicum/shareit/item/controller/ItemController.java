@@ -59,7 +59,7 @@ public class ItemController {
         return itemService.updateItem(itemRequestDto, itemId, ownerId);
     }
 
-    @ResponseStatus(code = HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.OK)
     @PostMapping("/{itemId}/comment")
     public ResponseCommentDto addComment(@RequestHeader(name = "X-Sharer-User-Id") Long userId, @PathVariable Long itemId,
                                          @Valid @RequestBody RequestCommentDto request) {
