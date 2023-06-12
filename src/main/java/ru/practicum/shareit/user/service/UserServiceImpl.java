@@ -26,6 +26,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<UserDtoResponse> getUsers() {
         return UserMapper.mapToDto(userRepository.findAll());
     }
@@ -36,18 +37,19 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден."));
 
-        if (request.getEmail() != null && !Objects.equals(request.getEmail(), user.getEmail())) {
+        if (!request.getEmail().isBlank() && !Objects.equals(request.getEmail(), user.getEmail())) {
             user.setEmail(request.getEmail());
         }
 
-        if (request.getName() != null) {
+        if (!request.getName().isBlank()) {
             user.setName(request.getName());
         }
-        User savedUser = userRepository.save(user);
-        return UserMapper.mapToDto(savedUser);
+
+        return UserMapper.mapToDto(user);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public UserDtoResponse getUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден."));
@@ -55,6 +57,7 @@ public class UserServiceImpl implements UserService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public User findUserById(Long userId) {
         return userRepository.findById(userId)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден."));

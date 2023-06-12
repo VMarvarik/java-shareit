@@ -82,6 +82,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ResponseBookingDto findById(Long bookingId, Long userId) {
         Booking booking = bookingRepository.findById(bookingId)
                 .orElseThrow(() -> new EntityNotFoundException("Букинга нет в базе"));
@@ -94,6 +95,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResponseBookingDto> getAllByBooker(Long userId, String state) {
         userService.checkIfUserExists(userId);
 
@@ -129,6 +131,7 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ResponseBookingDto> getAllByOwner(Long ownerId, String state) {
         User user = userService.findUserById(ownerId);
         LocalDateTime dateNow = LocalDateTime.now();
@@ -167,16 +170,19 @@ public class BookingServiceImpl implements BookingService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Booking> getAllByItemId(Long id) {
         return bookingRepository.findAllByItemId(id);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Booking> getAllByItemIdIn(List<Long> itemIds) {
         return bookingRepository.findAllByItemIdIn(itemIds);
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<Booking> getAllByItemIdAndTime(Long itemId, LocalDateTime created) {
         return bookingRepository.findByItemIdAndEndIsBefore(itemId, created);
     }

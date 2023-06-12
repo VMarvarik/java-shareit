@@ -21,6 +21,7 @@ public class Comment {
     @GeneratedValue(strategy = GenerationType.IDENTITY)
     private Long id;
 
+    @Column(name = "text")
     private String text;
 
     @ManyToOne
@@ -31,5 +32,6 @@ public class Comment {
     @JoinColumn(name = "author_id", referencedColumnName = "id")
     private User author;
 
+    @Column(name = "created", nullable = false)
     private LocalDateTime created;
 }

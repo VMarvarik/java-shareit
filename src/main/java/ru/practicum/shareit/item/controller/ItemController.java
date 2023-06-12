@@ -22,7 +22,7 @@ import java.util.List;
 public class ItemController {
     private final ItemService itemService;
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
     public ItemResponseDto addItem(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId,
                                    @Valid @RequestBody ItemRequestDto itemRequestDto) {
@@ -30,27 +30,28 @@ public class ItemController {
         return itemService.addItem(itemRequestDto, ownerId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/{id}")
     public ItemResponseDto getItem(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId, @PathVariable Long id) {
         log.info("Вызов предмета");
         return itemService.getItem(id, ownerId);
     }
 
+    @ResponseStatus(code = HttpStatus.OK)
     @GetMapping
     public List<ItemResponseDto> getOwnerItems(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId) {
         log.info("Поиск предметов по пользователю");
         return itemService.getOwnerItems(ownerId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/search")
     public List<ItemResponseDto> searchAvailableItems(@RequestParam(name = "text") String text) {
         log.info("Поиск предметов по тексту");
         return itemService.searchAvailableItems(text);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.OK)
     @PatchMapping("/{itemId}")
     public ItemResponseDto updateItem(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId, @PathVariable Long itemId,
                                       @RequestBody ItemRequestDto itemRequestDto) {
@@ -58,7 +59,7 @@ public class ItemController {
         return itemService.updateItem(itemRequestDto, itemId, ownerId);
     }
 
-    @ResponseStatus(HttpStatus.OK)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping("/{itemId}/comment")
     public ResponseCommentDto addComment(@RequestHeader(name = "X-Sharer-User-Id") Long userId, @PathVariable Long itemId,
                                          @Valid @RequestBody RequestCommentDto request) {

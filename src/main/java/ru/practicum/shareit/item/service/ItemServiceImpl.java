@@ -51,6 +51,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public ItemResponseDto getItem(Long itemId, Long userId) {
         Item item = itemRepository.findById(itemId)
                 .orElseThrow(() -> new EntityNotFoundException("Вещь не найдена."));
@@ -69,6 +70,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemResponseDto> getOwnerItems(Long ownerId) {
         userService.checkIfUserExists(ownerId);
 
@@ -114,6 +116,7 @@ public class ItemServiceImpl implements ItemService {
     }
 
     @Override
+    @Transactional(readOnly = true)
     public List<ItemResponseDto> searchAvailableItems(String query) {
         if (!StringUtils.hasLength(query)) {
             return List.of();

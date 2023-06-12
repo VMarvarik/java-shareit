@@ -20,7 +20,7 @@ import java.util.List;
 public class UserController {
     private final UserService userService;
 
-    @ResponseStatus(HttpStatus.CREATED)
+    @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
     public UserDtoResponse addUser(@Valid @RequestBody UserDto userDto) {
         log.info("Добавление пользователя");
