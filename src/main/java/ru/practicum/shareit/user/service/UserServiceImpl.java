@@ -37,7 +37,7 @@ public class UserServiceImpl implements UserService {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден."));
 
-        if (!request.getEmail().isBlank() && !Objects.equals(request.getEmail(), user.getEmail())) {
+        if (request.getEmail() != null && !Objects.equals(request.getEmail(), user.getEmail())) {
             user.setEmail(request.getEmail());
         }
 
