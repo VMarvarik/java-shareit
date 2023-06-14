@@ -11,7 +11,7 @@ import java.util.stream.Collectors;
 @UtilityClass
 public class BookingMapper {
 
-    public static ResponseBookingDto mapToDto(Booking booking) {
+    public ResponseBookingDto mapToDto(Booking booking) {
         ResponseBookingDto.Item itemDto = ResponseBookingDto.Item.builder()
                 .id(booking.getItem().getId())
                 .name(booking.getItem().getName())
@@ -31,7 +31,7 @@ public class BookingMapper {
                 .build();
     }
 
-    public static Booking mapToModel(RequestBookingDto bookingDto) {
+    public Booking mapToModel(RequestBookingDto bookingDto) {
         return Booking.builder()
                 .start(bookingDto.getStart())
                 .end(bookingDto.getEnd())

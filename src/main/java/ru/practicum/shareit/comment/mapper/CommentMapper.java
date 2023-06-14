@@ -11,14 +11,14 @@ import java.util.stream.Collectors;
 
 @UtilityClass
 public class CommentMapper {
-    public static Comment mapToModel(RequestCommentDto commentDto) {
+    public Comment mapToModel(RequestCommentDto commentDto) {
         return Comment.builder()
                 .text(commentDto.getText())
                 .created(LocalDateTime.now())
                 .build();
     }
 
-    public static ResponseCommentDto mapToDto(Comment comment) {
+    public ResponseCommentDto mapToDto(Comment comment) {
         return ResponseCommentDto.builder()
                 .id(comment.getId())
                 .text(comment.getText())
@@ -27,7 +27,7 @@ public class CommentMapper {
                 .build();
     }
 
-    public static List<ResponseCommentDto> mapToDtoList(List<Comment> comments) {
+    public List<ResponseCommentDto> mapToDtoList(List<Comment> comments) {
         return comments.stream()
                 .map(CommentMapper::mapToDto)
                 .collect(Collectors.toList());
