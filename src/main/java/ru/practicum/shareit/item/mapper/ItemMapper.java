@@ -1,26 +1,36 @@
 package ru.practicum.shareit.item.mapper;
 
-import ru.practicum.shareit.item.dto.ItemDto;
+import lombok.experimental.UtilityClass;
+import ru.practicum.shareit.item.dto.ItemRequestDto;
+import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.model.Item;
 
+import java.util.List;
+import java.util.stream.Collectors;
+
+@UtilityClass
 public class ItemMapper {
-    public static Item mapToModel(ItemDto itemDto) {
+
+    public ItemResponseDto mapToDto(Item item) {
+        return ItemResponseDto.builder()
+                .id(item.getId())
+                .name(item.getName())
+                .description(item.getDescription())
+                .available(item.getAvailable())
+                .build();
+    }
+
+    public Item mapToModel(ItemRequestDto itemDto) {
         return Item.builder()
-                .itemId(itemDto.getId())
-                .ownerId(itemDto.getOwnerId())
                 .name(itemDto.getName())
                 .description(itemDto.getDescription())
                 .available(itemDto.getAvailable())
                 .build();
     }
 
-    public static ItemDto mapToDto(Item item) {
-        return ItemDto.builder()
-                .id(item.getItemId())
-                .ownerId(item.getOwnerId())
-                .name(item.getName())
-                .description(item.getDescription())
-                .available(item.getAvailable())
-                .build();
+    public List<ItemResponseDto> mapToDto(List<Item> items) {
+        return items.stream()
+                .map(ItemMapper::mapToDto)
+                .collect(Collectors.toList());
     }
 }
