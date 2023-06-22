@@ -49,8 +49,8 @@ public class ItemServiceImpl implements ItemService {
 
         Item item = ItemMapper.mapToModel(itemRequestDto);
         item.setOwner(user);
-        if (item.getRequest() != null) {
-            Long requestId = itemRequestDto.getRequestId();
+        Long requestId = itemRequestDto.getRequestId();
+        if (itemRequestDto.getRequestId() != null) {
             Request request = requestRepository.findById(requestId)
                     .orElseThrow(() -> new EntityNotFoundException("Такого запроса нет"));
             item.setRequest(request);

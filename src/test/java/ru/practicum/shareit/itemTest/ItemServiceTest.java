@@ -142,11 +142,10 @@ class ItemServiceTest {
                 .name("Лопата")
                 .description("Лопата для сада")
                 .available(true)
-                .requestId(55L)
+                .requestId(null)
                 .build();
 
         item.setRequest(null);
-
         when(userService.findUserById(anyLong())).thenReturn(user1);
         when(requestRepository.findById(anyLong())).thenReturn(Optional.empty());
         when(itemRepository.save(any(Item.class))).thenReturn(item);
