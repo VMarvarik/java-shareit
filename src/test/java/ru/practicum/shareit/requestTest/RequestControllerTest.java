@@ -45,7 +45,7 @@ class RequestControllerTest {
     @Autowired
     ObjectMapper mapper;
 
-    String USER_HEADER = "X-Sharer-User-Id";
+    String userHeader = "X-Sharer-User-Id";
 
     @Test
     void addItemCorrectRequest() throws Exception {
@@ -72,7 +72,7 @@ class RequestControllerTest {
                 .thenReturn(requestDto);
 
         mvc.perform(post("/requests")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(request)))
                 .andDo(print())
@@ -103,7 +103,7 @@ class RequestControllerTest {
                 .thenReturn(List.of(requestDto));
 
         mvc.perform(get("/requests")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].description").value("Мне нужна лопата"))
@@ -132,7 +132,7 @@ class RequestControllerTest {
                 .thenReturn(requestDto);
 
         mvc.perform(get("/requests/1")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.description").value("Мне нужна лопата"))
@@ -161,7 +161,7 @@ class RequestControllerTest {
                 .thenReturn(List.of(requestDto));
 
         mvc.perform(get("/requests/all")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "1")
                         .param("size", "1"))
                 .andDo(print())
@@ -178,7 +178,7 @@ class RequestControllerTest {
                 .thenReturn(List.of());
 
         mvc.perform(get("/requests")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$").isEmpty());
@@ -192,7 +192,7 @@ class RequestControllerTest {
                 .getRequestById(anyLong());
 
         mvc.perform(get("/requests")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
@@ -204,7 +204,7 @@ class RequestControllerTest {
                 .getRequestByUserId(anyLong(), anyLong());
 
         mvc.perform(get("/requests/1")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
@@ -216,7 +216,7 @@ class RequestControllerTest {
                 .getRequestsByOtherUsers(anyLong(), anyInt(), anyInt());
 
         mvc.perform(get("/requests/all")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "-1")
                         .param("size", "-1"))
                 .andDo(print())
@@ -229,7 +229,7 @@ class RequestControllerTest {
                 .thenReturn(List.of());
 
         mvc.perform(get("/requests/all")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "1")
                         .param("size", "1"))
                 .andDo(print())

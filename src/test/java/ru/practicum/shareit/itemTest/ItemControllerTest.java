@@ -48,7 +48,7 @@ class ItemControllerTest {
     @Autowired
     ObjectMapper mapper;
 
-    String USER_HEADER = "X-Sharer-User-Id";
+    String userHeader = "X-Sharer-User-Id";
 
     @Test
     void addItemShouldBeOk() throws Exception {
@@ -69,7 +69,7 @@ class ItemControllerTest {
                 .thenReturn(itemResponse);
 
         mvc.perform(post("/items")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(itemRequest)))
                 .andDo(print())
@@ -93,7 +93,7 @@ class ItemControllerTest {
                 .updateItem(any(ItemRequestDto.class), anyLong(), anyLong());
 
         mvc.perform(patch("/items/1")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(itemRequest)))
                 .andDo(print())
@@ -113,7 +113,7 @@ class ItemControllerTest {
                 .updateItem(any(ItemRequestDto.class), anyLong(), anyLong());
 
         mvc.perform(patch("/items/1")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(itemRequest)))
                 .andDo(print())
@@ -126,7 +126,7 @@ class ItemControllerTest {
                 .thenReturn(List.of());
 
         mvc.perform(MockMvcRequestBuilders.get("/items")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$[0].id").doesNotExist());
@@ -139,7 +139,7 @@ class ItemControllerTest {
                 .getOwnerItems(anyLong());
 
         mvc.perform(MockMvcRequestBuilders.get("/items")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
@@ -151,7 +151,7 @@ class ItemControllerTest {
                 .getItem(anyLong(), anyLong());
 
         mvc.perform(MockMvcRequestBuilders.get("/items/1")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound());
     }
@@ -168,7 +168,7 @@ class ItemControllerTest {
                 .thenReturn(itemResponse);
 
         mvc.perform(MockMvcRequestBuilders.get("/items/1")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").exists())
@@ -225,7 +225,7 @@ class ItemControllerTest {
                 .thenReturn(commentResponse);
 
         mvc.perform(post("/items/1/comment")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(commentRequest)))
                 .andDo(print())
@@ -246,7 +246,7 @@ class ItemControllerTest {
                 .addComment(any(RequestCommentDto.class), anyLong(), anyLong());
 
         mvc.perform(post("/items/1/comment")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(commentRequest)))
                 .andDo(print())

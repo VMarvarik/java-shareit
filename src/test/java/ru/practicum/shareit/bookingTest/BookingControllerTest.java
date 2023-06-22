@@ -47,7 +47,7 @@ class BookingControllerTest {
     @Autowired
     ObjectMapper mapper;
 
-    String USER_HEADER = "X-Sharer-User-Id";
+    String userHeader = "X-Sharer-User-Id";
 
     @Test
     void getAllBookingsByBookerCorrectPageableParameters() throws Exception {
@@ -64,7 +64,7 @@ class BookingControllerTest {
                 .thenReturn(List.of(bookingResponse));
 
         mvc.perform(MockMvcRequestBuilders.get("/bookings")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "1")
                         .param("size", "1")
                         .param("state", "ALL"))
@@ -82,7 +82,7 @@ class BookingControllerTest {
                 .getAllByBooker(anyLong(), anyString(), anyInt(), anyInt());
 
         mvc.perform(MockMvcRequestBuilders.get("/bookings")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "-1")
                         .param("size", "-1")
                         .param("state", "ALL"))
@@ -106,7 +106,7 @@ class BookingControllerTest {
                 .thenReturn(List.of(bookingResponse));
 
         mvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "1")
                         .param("size", "1")
                         .param("state", "ALL"))
@@ -124,7 +124,7 @@ class BookingControllerTest {
                 .getAllByOwner(anyLong(), anyString(), anyInt(), anyInt());
 
         mvc.perform(MockMvcRequestBuilders.get("/bookings/owner")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("from", "-1")
                         .param("size", "-1")
                         .param("state", "ALL"))
@@ -145,7 +145,7 @@ class BookingControllerTest {
                 .when(bookingService).addBooking(anyLong(), any(RequestBookingDto.class));
 
         mvc.perform(post("/bookings")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(requestBookingDto)))
                 .andDo(print())
@@ -165,7 +165,7 @@ class BookingControllerTest {
                 .when(bookingService).addBooking(anyLong(), any(RequestBookingDto.class));
 
         mvc.perform(post("/bookings")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(bookingRequest)))
                 .andDo(print())
@@ -185,7 +185,7 @@ class BookingControllerTest {
                 .when(bookingService).addBooking(anyLong(), any(RequestBookingDto.class));
 
         mvc.perform(post("/bookings")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(bookingRequest)))
                 .andDo(print())
@@ -213,7 +213,7 @@ class BookingControllerTest {
                 .thenReturn(bookingResponse);
 
         mvc.perform(post("/bookings")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .contentType(MediaType.APPLICATION_JSON_VALUE)
                         .content(mapper.writeValueAsString(bookingRequest)))
                 .andDo(print())
@@ -230,7 +230,7 @@ class BookingControllerTest {
                 .when(bookingService).updateStatus(anyLong(), anyBoolean(), anyLong());
 
         mvc.perform(patch("/bookings/1")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("approved", "true"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
@@ -244,7 +244,7 @@ class BookingControllerTest {
                 .when(bookingService).updateStatus(anyLong(), anyBoolean(), anyLong());
 
         mvc.perform(patch("/bookings/1")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("approved", "true"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isBadRequest())
@@ -266,7 +266,7 @@ class BookingControllerTest {
                 .thenReturn(bookingResponse);
 
         mvc.perform(patch("/bookings/1")
-                        .header(USER_HEADER, 1)
+                        .header(userHeader, 1)
                         .param("approved", "true"))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
@@ -291,7 +291,7 @@ class BookingControllerTest {
                 .thenReturn(bookingResponse);
 
         mvc.perform(MockMvcRequestBuilders.get("/bookings/1")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isOk())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.status").value(Status.APPROVED.toString()))
@@ -305,7 +305,7 @@ class BookingControllerTest {
                 .when(bookingService).findById(anyLong(), anyLong());
 
         mvc.perform(MockMvcRequestBuilders.get("/bookings/1")
-                        .header(USER_HEADER, 1))
+                        .header(userHeader, 1))
                 .andDo(print())
                 .andExpect(MockMvcResultMatchers.status().isNotFound())
                 .andExpect(MockMvcResultMatchers.jsonPath("$.id").doesNotExist());
