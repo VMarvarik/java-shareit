@@ -6,8 +6,11 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.dto.ResponseBookingDto;
 import ru.practicum.shareit.booking.service.BookingService;
+import ru.practicum.shareit.exception.InvalidRequestException;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -41,14 +44,28 @@ public class BookingController {
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
     public List<ResponseBookingDto> getAllBookingsByBooker(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                                           @RequestParam(name = "state", defaultValue = "ALL") String state) {
-        return bookingService.getAllByBooker(userId, state);
+                                                           @RequestParam(name = "state", defaultValue = "ALL") String state,
+                                                           @RequestParam(value = "from",
+                                                                   defaultValue = "0") @PositiveOrZero Integer from,
+                                                           @RequestParam(value = "size",
+                                                                   defaultValue = "10") @Positive Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
+        }
+        return bookingService.getAllByBooker(userId, state, from, size);
     }
 
     @GetMapping("/owner")
     @ResponseStatus(code = HttpStatus.OK)
     public List<ResponseBookingDto> getAllBookingsByOwner(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
-                                                          @RequestParam(name = "state", defaultValue = "ALL") String state) {
-        return bookingService.getAllByOwner(userId, state);
+                                                          @RequestParam(name = "state", defaultValue = "ALL") String state,
+                                                          @RequestParam(value = "from",
+                                                                  defaultValue = "0") @PositiveOrZero Integer from,
+                                                          @RequestParam(value = "size",
+                                                                  defaultValue = "10") @Positive Integer size) {
+        if (size <= 0 || from < 0) {
+            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
+        }
+        return bookingService.getAllByOwner(userId, state, from, size);
     }
 }

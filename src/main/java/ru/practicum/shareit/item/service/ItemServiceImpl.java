@@ -21,6 +21,8 @@ import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.mapper.ItemMapper;
 import ru.practicum.shareit.item.model.Item;
 import ru.practicum.shareit.item.repository.ItemRepository;
+import ru.practicum.shareit.request.model.Request;
+import ru.practicum.shareit.request.repository.RequestRepository;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
@@ -38,14 +40,21 @@ public class ItemServiceImpl implements ItemService {
     private final BookingService bookingService;
     private final CommentService commentService;
 
+    private final RequestRepository requestRepository;
+
     @Override
     @Transactional
-    public ItemResponseDto addItem(ItemRequestDto request, Long ownerId) {
+    public ItemResponseDto addItem(ItemRequestDto itemRequestDto, Long ownerId) {
         User user = userService.findUserById(ownerId);
 
-        Item item = ItemMapper.mapToModel(request);
+        Item item = ItemMapper.mapToModel(itemRequestDto);
         item.setOwner(user);
-
+        if (item.getRequest() != null) {
+            Long requestId = itemRequestDto.getRequestId();
+            Request request = requestRepository.findById(requestId)
+                    .orElseThrow(() -> new EntityNotFoundException("Такого запроса нет"));
+            item.setRequest(request);
+        }
         Item savedItem = itemRepository.save(item);
         return ItemMapper.mapToDto(savedItem);
     }
@@ -147,6 +156,16 @@ public class ItemServiceImpl implements ItemService {
         Comment savedComment = commentService.save(comment);
 
         return CommentMapper.mapToDto(savedComment);
+    }
+
+    @Override
+    public Item findByRequestId(Long id) {
+        return itemRepository.findByRequestId(id);
+    }
+
+    @Override
+    public List<Item> findAllByRequestIdIn(List<Long> ids) {
+        return itemRepository.findAllByRequestIdIn(ids);
     }
 
     private ItemResponseDto setLastAndNextBookings(List<Booking> bookingList, ItemResponseDto itemResponseDto) {

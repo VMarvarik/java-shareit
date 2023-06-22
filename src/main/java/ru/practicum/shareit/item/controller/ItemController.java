@@ -12,6 +12,8 @@ import ru.practicum.shareit.item.dto.ItemResponseDto;
 import ru.practicum.shareit.item.service.ItemService;
 
 import javax.validation.Valid;
+import javax.validation.constraints.Positive;
+import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @Validated
@@ -39,14 +41,22 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping
-    public List<ItemResponseDto> getOwnerItems(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId) {
+    public List<ItemResponseDto> getOwnerItems(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId,
+                                               @RequestParam(value = "from",
+                                                       defaultValue = "0", required = false) @PositiveOrZero Integer from,
+                                               @RequestParam(value = "size",
+                                                       defaultValue = "10", required = false) @Positive Integer size) {
         log.info("Поиск предметов по пользователю");
         return itemService.getOwnerItems(ownerId);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/search")
-    public List<ItemResponseDto> searchAvailableItems(@RequestParam(name = "text") String text) {
+    public List<ItemResponseDto> searchAvailableItems(@RequestParam(name = "text") String text,
+                                                      @RequestParam(value = "from",
+                                                              defaultValue = "0", required = false) @PositiveOrZero Integer from,
+                                                      @RequestParam(value = "size",
+                                                              defaultValue = "10", required = false) @Positive Integer size) {
         log.info("Поиск предметов по тексту");
         return itemService.searchAvailableItems(text);
     }
