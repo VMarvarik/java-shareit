@@ -16,6 +16,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+import static ru.practicum.shareit.request.controller.RequestController.REQUEST_HEADER;
+
 @Validated
 @RestController
 @RequestMapping("/items")
@@ -26,7 +28,7 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
-    public ItemResponseDto addItem(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId,
+    public ItemResponseDto addItem(@RequestHeader(REQUEST_HEADER) Long ownerId,
                                    @Valid @RequestBody ItemRequestDto itemRequestDto) {
         log.info("Добавление предмета");
         return itemService.addItem(itemRequestDto, ownerId);
@@ -34,14 +36,14 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/{id}")
-    public ItemResponseDto getItem(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId, @PathVariable Long id) {
+    public ItemResponseDto getItem(@RequestHeader(REQUEST_HEADER) Long ownerId, @PathVariable Long id) {
         log.info("Вызов предмета");
         return itemService.getItem(id, ownerId);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping
-    public List<ItemResponseDto> getOwnerItems(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId,
+    public List<ItemResponseDto> getOwnerItems(@RequestHeader(REQUEST_HEADER) Long ownerId,
                                                @RequestParam(value = "from",
                                                        defaultValue = "0", required = false) @PositiveOrZero Integer from,
                                                @RequestParam(value = "size",
@@ -63,7 +65,7 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @PatchMapping("/{itemId}")
-    public ItemResponseDto updateItem(@RequestHeader(name = "X-Sharer-User-Id") Long ownerId, @PathVariable Long itemId,
+    public ItemResponseDto updateItem(@RequestHeader(REQUEST_HEADER) Long ownerId, @PathVariable Long itemId,
                                       @RequestBody ItemRequestDto itemRequestDto) {
         log.info("Обновление предмета");
         return itemService.updateItem(itemRequestDto, itemId, ownerId);
@@ -71,7 +73,7 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @PostMapping("/{itemId}/comment")
-    public ResponseCommentDto addComment(@RequestHeader(name = "X-Sharer-User-Id") Long userId, @PathVariable Long itemId,
+    public ResponseCommentDto addComment(@RequestHeader(REQUEST_HEADER) Long userId, @PathVariable Long itemId,
                                          @Valid @RequestBody RequestCommentDto request) {
         log.info("Добавление комментария");
         return itemService.addComment(request, userId, itemId);

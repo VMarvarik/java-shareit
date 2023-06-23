@@ -18,29 +18,31 @@ import java.util.List;
 public class RequestController {
     private final RequestService requestService;
 
+    public static final String REQUEST_HEADER = "X-Sharer-User-Id";
+
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public RequestDto addItemRequest(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public RequestDto addItemRequest(@RequestHeader(REQUEST_HEADER) Long userId,
                                      @RequestBody @Valid RequestDto requestDto) {
         return requestService.addRequest(requestDto, userId);
     }
 
     @GetMapping("/{requestId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public RequestDto getItemRequestById(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public RequestDto getItemRequestById(@RequestHeader(REQUEST_HEADER) Long userId,
                                          @PathVariable Long requestId) {
         return requestService.getRequestByUserId(userId, requestId);
     }
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<RequestDto> getAllItemRequests(@RequestHeader(name = "X-Sharer-User-Id") Long userId) {
+    public List<RequestDto> getAllItemRequests(@RequestHeader(REQUEST_HEADER) Long userId) {
         return requestService.getAllRequestsByUserId(userId);
     }
 
     @GetMapping("/all")
     @ResponseStatus(code = HttpStatus.OK)
-    public List<RequestDto> getItemRequestsByOtherUsers(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public List<RequestDto> getItemRequestsByOtherUsers(@RequestHeader(REQUEST_HEADER) Long userId,
                                                         @RequestParam(value = "from",
                                                                 defaultValue = "0", required = false) @PositiveOrZero Integer from,
                                                         @RequestParam(value = "size",

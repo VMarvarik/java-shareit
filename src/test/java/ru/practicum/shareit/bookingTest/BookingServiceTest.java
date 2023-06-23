@@ -1,5 +1,6 @@
 package ru.practicum.shareit.bookingTest;
 
+import org.junit.jupiter.api.BeforeEach;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.context.SpringBootTest;
@@ -42,24 +43,31 @@ class BookingServiceTest {
 
     @MockBean
     ItemRepository itemRepository;
+    User user;
+    User user2;
+    Item item;
+    Booking booking;
 
-    User user = User.builder().id(1L).name("Варвара").email("varvara@gmail.com").build();
-    User user2 = User.builder().id(2L).name("Михаил").email("michael@gmail.com").build();
+    @BeforeEach
+    void beforeEach() {
+        user = User.builder().id(1L).name("Варвара").email("varvara@gmail.com").build();
+        user2 = User.builder().id(2L).name("Михаил").email("michael@gmail.com").build();
 
-    Item item = Item.builder().id(1L)
-            .name("Лопата")
-            .description("Лопата для сада")
-            .owner(user)
-            .available(true)
-            .build();
+        item = Item.builder().id(1L)
+                .name("Лопата")
+                .description("Лопата для сада")
+                .owner(user)
+                .available(true)
+                .build();
 
-    Booking booking = Booking.builder()
-            .id(1L)
-            .item(item)
-            .start(LocalDateTime.of(2023, 2, 10, 17, 10, 5))
-            .end(LocalDateTime.of(2023, 2, 10, 17, 10, 5).plusDays(15))
-            .booker(user2)
-            .build();
+        booking = Booking.builder()
+                .id(1L)
+                .item(item)
+                .start(LocalDateTime.of(2023, 2, 10, 17, 10, 5))
+                .end(LocalDateTime.of(2023, 2, 10, 17, 10, 5).plusDays(15))
+                .booker(user2)
+                .build();
+    }
 
     @Test
     void addBookingIfUserIdDoNotExist() {
@@ -343,7 +351,7 @@ class BookingServiceTest {
 
         bookingService.getAllByBooker(1L, state, from, size);
 
-        verify(bookingRepository, atLeast(1))
+        verify(bookingRepository, times(1))
                 .findByBookerIdAndEndIsBefore(anyLong(), any(LocalDateTime.class), any(Pageable.class));
     }
 

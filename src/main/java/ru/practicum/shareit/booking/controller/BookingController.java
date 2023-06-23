@@ -13,6 +13,8 @@ import javax.validation.constraints.Positive;
 import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
+import static ru.practicum.shareit.request.controller.RequestController.REQUEST_HEADER;
+
 @RequiredArgsConstructor
 @RestController
 @RequestMapping(path = "/bookings")
@@ -21,14 +23,14 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseBookingDto addBooking(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public ResponseBookingDto addBooking(@RequestHeader(REQUEST_HEADER) Long userId,
                                          @RequestBody @Valid RequestBookingDto requestBookingDto) {
         return bookingService.addBooking(userId, requestBookingDto);
     }
 
     @PatchMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseBookingDto changeBookingStatus(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public ResponseBookingDto changeBookingStatus(@RequestHeader(REQUEST_HEADER) Long userId,
                                                   @PathVariable Long bookingId,
                                                   @RequestParam(name = "approved") Boolean approved) {
         return bookingService.updateStatus(bookingId, approved, userId);
@@ -36,14 +38,14 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseBookingDto findBookingById(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public ResponseBookingDto findBookingById(@RequestHeader(REQUEST_HEADER) Long userId,
                                               @PathVariable Long bookingId) {
         return bookingService.findById(bookingId, userId);
     }
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<ResponseBookingDto> getAllBookingsByBooker(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public List<ResponseBookingDto> getAllBookingsByBooker(@RequestHeader(REQUEST_HEADER) Long userId,
                                                            @RequestParam(name = "state", defaultValue = "ALL") String state,
                                                            @RequestParam(value = "from",
                                                                    defaultValue = "0") @PositiveOrZero Integer from,
@@ -57,7 +59,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     @ResponseStatus(code = HttpStatus.OK)
-    public List<ResponseBookingDto> getAllBookingsByOwner(@RequestHeader(name = "X-Sharer-User-Id") Long userId,
+    public List<ResponseBookingDto> getAllBookingsByOwner(@RequestHeader(REQUEST_HEADER) Long userId,
                                                           @RequestParam(name = "state", defaultValue = "ALL") String state,
                                                           @RequestParam(value = "from",
                                                                   defaultValue = "0") @PositiveOrZero Integer from,

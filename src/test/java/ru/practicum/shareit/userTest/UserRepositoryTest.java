@@ -22,29 +22,65 @@ class UserRepositoryTest {
     UserRepository userRepository;
 
     @Test
-    void findByEmailOne() {
+    void findByEmailOneAssertId() {
         Optional<User> resultOptional = userRepository.findByEmail("varvara@gmail.com");
         assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getId()).isNotNull();
+    }
+
+    @Test
+    void findByEmailOneAssertName() {
+        Optional<User> resultOptional = userRepository.findByEmail("varvara@gmail.com");
+        assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getName()).isEqualTo("Варвара");
+    }
+
+    @Test
+    void findByEmailOneAssertNameAssertEmail() {
+        Optional<User> resultOptional = userRepository.findByEmail("varvara@gmail.com");
+        assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getEmail()).isEqualTo("varvara@gmail.com");
     }
 
     @Test
-    void findByEmailTwo() {
+    void findByEmailTwoAssertId() {
         Optional<User> resultOptional = userRepository.findByEmail("semyon@gmail.com");
         assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getId()).isNotNull();
+    }
+
+    @Test
+    void findByEmailTwoAssertName() {
+        Optional<User> resultOptional = userRepository.findByEmail("semyon@gmail.com");
+        assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getName()).isEqualTo("Семен");
+    }
+
+    @Test
+    void findByEmailTwoAssertEmail() {
+        Optional<User> resultOptional = userRepository.findByEmail("semyon@gmail.com");
+        assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getEmail()).isEqualTo("semyon@gmail.com");
     }
 
     @Test
-    void findByEmailThree() {
+    void findByEmailThreeAssertId() {
         Optional<User> resultOptional = userRepository.findByEmail("michael@gmail.com");
         assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getId()).isNotNull();
+    }
+
+    @Test
+    void findByEmailThreeAssertName() {
+        Optional<User> resultOptional = userRepository.findByEmail("michael@gmail.com");
+        assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getName()).isEqualTo("Михаил");
+    }
+
+    @Test
+    void findByEmailThreeEmail() {
+        Optional<User> resultOptional = userRepository.findByEmail("michael@gmail.com");
+        assertTrue(resultOptional.isPresent());
         assertThat(resultOptional.get().getEmail()).isEqualTo("michael@gmail.com");
     }
 

@@ -27,7 +27,6 @@ import java.util.stream.Collectors;
 public class RequestServiceImpl implements RequestService {
     private final RequestRepository requestRepository;
     private final UserService userService;
-
     private final ItemService itemService;
 
 

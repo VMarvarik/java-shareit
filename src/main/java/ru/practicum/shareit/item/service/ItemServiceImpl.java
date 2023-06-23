@@ -39,7 +39,6 @@ public class ItemServiceImpl implements ItemService {
     private final UserService userService;
     private final BookingService bookingService;
     private final CommentService commentService;
-
     private final RequestRepository requestRepository;
 
     @Override

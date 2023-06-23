@@ -6,6 +6,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
 import org.springframework.dao.DataIntegrityViolationException;
+import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoResponse;
 import ru.practicum.shareit.user.model.User;
@@ -32,7 +33,6 @@ class UserServiceIntegrationTest {
         User foundUser1 = userService.findUserById(1L);
         assertEquals("uniqueemail@mail.ru", user1.getEmail());
         assertNotNull(foundUser1);
-
-        //assertThrows(EntityNotFoundException.class, () -> userService.findUserById(2L));
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserById(2L));
     }
 }
