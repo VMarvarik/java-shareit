@@ -33,6 +33,6 @@ class UserServiceIntegrationTest {
         User foundUser1 = userService.findUserById(1L);
         assertEquals("uniqueemail@mail.ru", user1.getEmail());
         assertNotNull(foundUser1);
-        assertThrows(EntityNotFoundException.class, () -> userService.findUserById(2L));
+        assertThrows(EntityNotFoundException.class, () -> userService.findUserById(3L));
     }
 }
