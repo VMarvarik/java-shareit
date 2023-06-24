@@ -4,6 +4,7 @@ import ru.practicum.shareit.comment.dto.RequestCommentDto;
 import ru.practicum.shareit.comment.dto.ResponseCommentDto;
 import ru.practicum.shareit.item.dto.ItemRequestDto;
 import ru.practicum.shareit.item.dto.ItemResponseDto;
+import ru.practicum.shareit.item.model.Item;
 
 import java.util.List;
 
@@ -19,4 +20,8 @@ public interface ItemService {
     List<ItemResponseDto> searchAvailableItems(String query);
 
     ResponseCommentDto addComment(RequestCommentDto comment, Long ownerId, Long itemId);
+
+    Item findByRequestId(Long id);
+
+    List<Item> findAllByRequestIdIn(List<Long> ids);
 }
