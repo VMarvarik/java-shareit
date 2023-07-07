@@ -1,8 +1,6 @@
 package ru.practicum.shareit.userTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -18,15 +16,8 @@ import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.any;
 import static org.mockito.ArgumentMatchers.anyLong;
 import static org.mockito.Mockito.*;
@@ -195,131 +186,131 @@ class UserControllerTest {
                 .andExpect(MockMvcResultMatchers.jsonPath("$.email").value("varvara@gmail.com"));
     }
 
-    @Nested
-    class ValidationUserTest {
-
-        Validator validator;
-
-        @BeforeEach
-        void beforeEach() {
-            try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
-                validator = validatorFactory.getValidator();
-            }
-        }
-
-        @Test
-        void addIncorrectUser() {
-            UserDto test = new UserDto();
-
-            assertEquals(2, validator.validate(test).size());
-        }
-
-        @Test
-        void addUserIfNameIsEmpty() {
-            UserDto test = UserDto.builder().name("").email("test@mail.ru").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Имя пользователя не может быть пустым.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfNameIsNull() {
-            UserDto test = UserDto.builder().name(null).email("test@mail.ru").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Имя пользователя не может быть пустым.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfEmailIsEmpty() {
-            UserDto test = UserDto.builder().name("Test").email("").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertEquals(2, validationSet.size());
-        }
-
-        @Test
-        void addUserIfEmailIsNull() {
-            UserDto test = UserDto.builder().name("Test").email(null).build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта не может быть пустой.", validationSet.get(0).getMessage())
-            );
-        }
-
-
-        @Test
-        void addUserIfIncorrectEmailFirst() {
-            UserDto test = UserDto.builder().name("Test").email("email").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfIncorrectEmailSecond() {
-            UserDto test = UserDto.builder().name("Test").email("email@").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfIncorrectEmailThird() {
-            UserDto test = UserDto.builder().name("Test").email("email@.").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfIncorrectEmailFourth() {
-            UserDto test = UserDto.builder().name("Test").email("email@ ccom").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfIncorrectEmailFifth() {
-            UserDto test = UserDto.builder().name("Test").email("email@com.").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
-            );
-        }
-
-        @Test
-        void addUserIfIncorrectEmailSixth() {
-            UserDto test = UserDto.builder().name("Test").email("email@com///").build();
-
-            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
-            );
-        }
-    }
+//    @Nested
+//    class ValidationUserTest {
+//
+//        Validator validator;
+//
+//        @BeforeEach
+//        void beforeEach() {
+//            try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
+//                validator = validatorFactory.getValidator();
+//            }
+//        }
+//
+//        @Test
+//        void addIncorrectUser() {
+//            UserDto test = new UserDto();
+//
+//            assertEquals(2, validator.validate(test).size());
+//        }
+//
+//        @Test
+//        void addUserIfNameIsEmpty() {
+//            UserDto test = UserDto.builder().name("").email("test@mail.ru").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Имя пользователя не может быть пустым.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfNameIsNull() {
+//            UserDto test = UserDto.builder().name(null).email("test@mail.ru").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Имя пользователя не может быть пустым.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfEmailIsEmpty() {
+//            UserDto test = UserDto.builder().name("Test").email("").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertEquals(2, validationSet.size());
+//        }
+//
+//        @Test
+//        void addUserIfEmailIsNull() {
+//            UserDto test = UserDto.builder().name("Test").email(null).build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта не может быть пустой.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//
+//        @Test
+//        void addUserIfIncorrectEmailFirst() {
+//            UserDto test = UserDto.builder().name("Test").email("email").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfIncorrectEmailSecond() {
+//            UserDto test = UserDto.builder().name("Test").email("email@").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfIncorrectEmailThird() {
+//            UserDto test = UserDto.builder().name("Test").email("email@.").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfIncorrectEmailFourth() {
+//            UserDto test = UserDto.builder().name("Test").email("email@ ccom").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfIncorrectEmailFifth() {
+//            UserDto test = UserDto.builder().name("Test").email("email@com.").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
+//            );
+//        }
+//
+//        @Test
+//        void addUserIfIncorrectEmailSixth() {
+//            UserDto test = UserDto.builder().name("Test").email("email@com///").build();
+//
+//            List<ConstraintViolation<UserDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("Электронная почта должна соответствовать формату RFC 5322.", validationSet.get(0).getMessage())
+//            );
+//        }
+//    }
 }

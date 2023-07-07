@@ -7,9 +7,6 @@ import ru.practicum.shareit.exception.InvalidRequestException;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.service.RequestService;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 @RequiredArgsConstructor
@@ -23,7 +20,7 @@ public class RequestController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public RequestDto addItemRequest(@RequestHeader(REQUEST_HEADER) Long userId,
-                                     @RequestBody @Valid RequestDto requestDto) {
+                                     @RequestBody RequestDto requestDto) {
         return requestService.addRequest(requestDto, userId);
     }
 
@@ -44,9 +41,9 @@ public class RequestController {
     @ResponseStatus(code = HttpStatus.OK)
     public List<RequestDto> getItemRequestsByOtherUsers(@RequestHeader(REQUEST_HEADER) Long userId,
                                                         @RequestParam(value = "from",
-                                                                defaultValue = "0", required = false) @PositiveOrZero Integer from,
+                                                                defaultValue = "0", required = false) Integer from,
                                                         @RequestParam(value = "size",
-                                                                defaultValue = "10", required = false) @Positive Integer size) {
+                                                                defaultValue = "10", required = false) Integer size) {
         if (size <= 0 || from < 0) {
             throw new InvalidRequestException("Недопустимые значения параматеров size или from");
         }

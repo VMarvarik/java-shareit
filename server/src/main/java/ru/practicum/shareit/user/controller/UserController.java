@@ -3,26 +3,23 @@ package ru.practicum.shareit.user.controller;
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
-import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
 import ru.practicum.shareit.user.dto.UserDtoResponse;
 import ru.practicum.shareit.user.service.UserService;
 
-import javax.validation.Valid;
 import java.util.List;
 
 @RestController
 @RequestMapping(path = "/users")
 @Slf4j
 @RequiredArgsConstructor
-@Validated
 public class UserController {
     private final UserService userService;
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
-    public UserDtoResponse addUser(@Valid @RequestBody UserDto userDto) {
+    public UserDtoResponse addUser(@RequestBody UserDto userDto) {
         log.info("Добавление пользователя");
         return userService.addUser(userDto);
     }

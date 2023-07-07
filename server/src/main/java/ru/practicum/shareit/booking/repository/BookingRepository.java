@@ -4,7 +4,7 @@ import org.springframework.data.domain.Pageable;
 import org.springframework.data.jpa.repository.JpaRepository;
 import org.springframework.stereotype.Repository;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.model.BookingStatus;
 
 import java.time.LocalDateTime;
 import java.util.List;
@@ -26,9 +26,9 @@ public interface BookingRepository extends JpaRepository<Booking, Long> {
 
     List<Booking> findByItemIdInAndEndIsBefore(List<Long> itemId, LocalDateTime date, Pageable pageable);
 
-    List<Booking> findByItemIdInAndStartIsAfterAndStatusIs(List<Long> itemId, LocalDateTime date, Pageable pageable, Status bookingStatus);
+    List<Booking> findByItemIdInAndStartIsAfterAndStatusIs(List<Long> itemId, LocalDateTime date, Pageable pageable, BookingStatus bookingStatus);
 
-    List<Booking> findByBookerIdAndStartIsAfterAndStatusIs(Long userId, LocalDateTime date, Pageable pageable, Status bookingStatus);
+    List<Booking> findByBookerIdAndStartIsAfterAndStatusIs(Long userId, LocalDateTime date, Pageable pageable, BookingStatus bookingStatus);
 
     List<Booking> findByItemIdInAndStartIsAfter(List<Long> itemIdList, LocalDateTime date, Pageable pageable);
 

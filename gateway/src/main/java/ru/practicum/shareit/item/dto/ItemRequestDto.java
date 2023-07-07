@@ -15,6 +15,8 @@ import javax.validation.constraints.NotNull;
 public class ItemRequestDto {
     private Long id;
 
+    private Long owner;
+
     @NotBlank(message = "Название вещи не может быть пустым")
     private String name;
 
@@ -24,7 +26,6 @@ public class ItemRequestDto {
     @NotNull(message = "Статус вещи не может быть null.")
     private Boolean available;
 
-    private Long owner;
 
     private Long requestId;
 }

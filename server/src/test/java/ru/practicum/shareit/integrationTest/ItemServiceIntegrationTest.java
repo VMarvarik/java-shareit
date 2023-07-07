@@ -5,6 +5,7 @@ import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.jdbc.AutoConfigureTestDatabase;
 import org.springframework.boot.test.context.SpringBootTest;
+import org.springframework.data.domain.Pageable;
 import ru.practicum.shareit.comment.dto.RequestCommentDto;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.item.dto.ItemRequestDto;
@@ -62,7 +63,7 @@ class ItemServiceIntegrationTest {
 
         itemService.addItem(itemRequest, user2.getId());
 
-        List<ItemResponseDto> results = itemService.getOwnerItems(user1.getId());
+        List<ItemResponseDto> results = itemService.getOwnerItems(user1.getId(), Pageable.unpaged());
 
         assertThat(results).hasSize(2);
     }

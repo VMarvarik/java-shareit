@@ -33,14 +33,14 @@ public class BookingController {
     public ResponseEntity<Object> changeBookingStatus(@RequestHeader(REQUEST_HEADER) Long userId,
                                                       @PathVariable Long bookingId,
                                                       @RequestParam(name = "approved") Boolean approved) {
-        return bookingClient.updateStatus(bookingId, userId, approved);
+        return bookingClient.updateStatus(userId, bookingId, approved);
     }
 
     @GetMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> findBookingById(@RequestHeader(REQUEST_HEADER) Long userId,
                                                   @PathVariable Long bookingId) {
-        return bookingClient.findById(bookingId, userId);
+        return bookingClient.findById(userId, bookingId);
     }
 
     @GetMapping
@@ -55,7 +55,7 @@ public class BookingController {
             throw new InvalidRequestException("Недопустимые значения параматеров size или from");
         }
         BookingState bookingState = BookingState.from(state)
-                .orElseThrow(() -> new EntityNotFoundException("Unknown state: " + state));
+                .orElseThrow(() -> new EntityNotFoundException("Неизестное состояние: " + state));
         return bookingClient.getAllByBooker(userId, bookingState, from, size);
     }
 
@@ -71,7 +71,7 @@ public class BookingController {
             throw new InvalidRequestException("Недопустимые значения параматеров size или from");
         }
         BookingState bookingState = BookingState.from(state)
-                .orElseThrow(() -> new EntityNotFoundException("Unknown state: " + state));
+                .orElseThrow(() -> new EntityNotFoundException("Неизестное состояние: " + state));
         return bookingClient.getAllByOwner(userId, bookingState, from, size);
     }
 }

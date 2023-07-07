@@ -27,16 +27,16 @@ public class ItemController {
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
     public ResponseEntity<Object> addItem(@RequestHeader(REQUEST_HEADER) Long ownerId,
-                                          @Valid @RequestBody ItemDtoForRequest itemRequestDto) {
+                                          @Valid @RequestBody ItemDtoForRequest itemDtoForRequest) {
         log.info("Добавление предмета");
-        return itemClient.addItem(ownerId, itemRequestDto);
+        return itemClient.addItem(ownerId, itemDtoForRequest);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/{id}")
     public ResponseEntity<Object> getItem(@RequestHeader(REQUEST_HEADER) Long ownerId, @PathVariable Long id) {
         log.info("Вызов предмета");
-        return itemClient.getItem(id, ownerId);
+        return itemClient.getItem(ownerId, id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -65,9 +65,9 @@ public class ItemController {
     @ResponseStatus(code = HttpStatus.OK)
     @PatchMapping("/{itemId}")
     public ResponseEntity<Object> updateItem(@RequestHeader(REQUEST_HEADER) Long ownerId, @PathVariable Long itemId,
-                                             @RequestBody ItemDtoForRequest itemRequestDto) {
+                                             @RequestBody ItemDtoForRequest itemDtoForRequest) {
         log.info("Обновление предмета");
-        return itemClient.updateItem(ownerId, itemId, itemRequestDto);
+        return itemClient.updateItem(ownerId, itemId, itemDtoForRequest);
     }
 
     @ResponseStatus(code = HttpStatus.OK)

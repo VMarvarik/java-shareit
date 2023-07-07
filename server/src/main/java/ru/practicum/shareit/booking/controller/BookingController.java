@@ -6,11 +6,7 @@ import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.dto.ResponseBookingDto;
 import ru.practicum.shareit.booking.service.BookingService;
-import ru.practicum.shareit.exception.InvalidRequestException;
 
-import javax.validation.Valid;
-import javax.validation.constraints.Positive;
-import javax.validation.constraints.PositiveOrZero;
 import java.util.List;
 
 import static ru.practicum.shareit.request.controller.RequestController.REQUEST_HEADER;
@@ -24,14 +20,14 @@ public class BookingController {
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseBookingDto addBooking(@RequestHeader(REQUEST_HEADER) Long userId,
-                                         @RequestBody @Valid RequestBookingDto requestBookingDto) {
+                                         @RequestBody RequestBookingDto requestBookingDto) {
         return bookingService.addBooking(userId, requestBookingDto);
     }
 
     @PatchMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseBookingDto changeBookingStatus(@RequestHeader(REQUEST_HEADER) Long userId,
-                                                  @PathVariable Long bookingId,
+                                                  @PathVariable(name = "bookingId") Long bookingId,
                                                   @RequestParam(name = "approved") Boolean approved) {
         return bookingService.updateStatus(bookingId, approved, userId);
     }
@@ -39,7 +35,7 @@ public class BookingController {
     @GetMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
     public ResponseBookingDto findBookingById(@RequestHeader(REQUEST_HEADER) Long userId,
-                                              @PathVariable Long bookingId) {
+                                              @PathVariable(name = "bookingId") Long bookingId) {
         return bookingService.findById(bookingId, userId);
     }
 
@@ -48,12 +44,9 @@ public class BookingController {
     public List<ResponseBookingDto> getAllBookingsByBooker(@RequestHeader(REQUEST_HEADER) Long userId,
                                                            @RequestParam(name = "state", defaultValue = "ALL") String state,
                                                            @RequestParam(value = "from",
-                                                                   defaultValue = "0") @PositiveOrZero Integer from,
+                                                                   defaultValue = "0") Integer from,
                                                            @RequestParam(value = "size",
-                                                                   defaultValue = "10") @Positive Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
-        }
+                                                                   defaultValue = "10") Integer size) {
         return bookingService.getAllByBooker(userId, state, from, size);
     }
 
@@ -62,12 +55,9 @@ public class BookingController {
     public List<ResponseBookingDto> getAllBookingsByOwner(@RequestHeader(REQUEST_HEADER) Long userId,
                                                           @RequestParam(name = "state", defaultValue = "ALL") String state,
                                                           @RequestParam(value = "from",
-                                                                  defaultValue = "0") @PositiveOrZero Integer from,
+                                                                  defaultValue = "0") Integer from,
                                                           @RequestParam(value = "size",
-                                                                  defaultValue = "10") @Positive Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
-        }
+                                                                  defaultValue = "10") Integer size) {
         return bookingService.getAllByOwner(userId, state, from, size);
     }
 }

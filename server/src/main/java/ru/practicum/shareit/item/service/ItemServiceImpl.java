@@ -1,12 +1,13 @@
 package ru.practicum.shareit.item.service;
 
 import lombok.RequiredArgsConstructor;
+import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import org.springframework.util.StringUtils;
 import ru.practicum.shareit.booking.dto.BookingDto;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.service.BookingService;
 import ru.practicum.shareit.comment.dto.RequestCommentDto;
 import ru.practicum.shareit.comment.dto.ResponseCommentDto;
@@ -79,11 +80,11 @@ public class ItemServiceImpl implements ItemService {
 
     @Override
     @Transactional(readOnly = true)
-    public List<ItemResponseDto> getOwnerItems(Long ownerId) {
+    public List<ItemResponseDto> getOwnerItems(Long ownerId, Pageable pageable) {
         userService.checkIfUserExists(ownerId);
 
-        List<Item> items = itemRepository.findAllByOwnerId(ownerId);
-        List<ItemResponseDto> dtos = ItemMapper.mapToDto(items);
+        List<ItemResponseDto> dtos = itemRepository.findAllByOwnerId(ownerId, pageable)
+                .stream().map(ItemMapper::mapToDto).collect(Collectors.toList());
 
         List<Long> itemsId = dtos.stream()
                 .map(ItemResponseDto::getId)
@@ -94,6 +95,7 @@ public class ItemServiceImpl implements ItemService {
         return dtos
                 .stream()
                 .map(itemsDto -> setLastAndNextBookings(bookingList, itemsDto))
+                .sorted(Comparator.comparing(ItemResponseDto::getId))
                 .collect(Collectors.toList());
     }
 
@@ -174,7 +176,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .filter(booking -> Objects.equals(booking.getItem().getId(), itemResponseDto.getId()))
                 .sorted(Comparator.comparing(Booking::getEnd).reversed())
-                .filter(booking -> booking.getStatus().equals(Status.APPROVED))
+                .filter(booking -> booking.getBookingStatus().equals(BookingStatus.APPROVED))
                 .filter(booking -> booking.getStart().isBefore(dateTime))
                 .limit(1)
                 .findAny()
@@ -187,7 +189,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .filter(booking -> Objects.equals(booking.getItem().getId(), itemResponseDto.getId()))
                 .sorted(Comparator.comparing(Booking::getStart))
-                .filter(booking -> booking.getStatus().equals(Status.APPROVED))
+                .filter(booking -> booking.getBookingStatus().equals(BookingStatus.APPROVED))
                 .filter(booking -> booking.getStart().isAfter(dateTime))
                 .limit(1)
                 .findAny()

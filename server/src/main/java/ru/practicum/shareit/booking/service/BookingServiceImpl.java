@@ -10,8 +10,8 @@ import ru.practicum.shareit.booking.dto.RequestBookingDto;
 import ru.practicum.shareit.booking.dto.ResponseBookingDto;
 import ru.practicum.shareit.booking.mapper.BookingMapper;
 import ru.practicum.shareit.booking.model.Booking;
-import ru.practicum.shareit.booking.model.State;
-import ru.practicum.shareit.booking.model.Status;
+import ru.practicum.shareit.booking.model.BookingState;
+import ru.practicum.shareit.booking.model.BookingStatus;
 import ru.practicum.shareit.booking.repository.BookingRepository;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.exception.InvalidRequestException;
@@ -21,6 +21,7 @@ import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.time.LocalDateTime;
+import java.util.ArrayList;
 import java.util.List;
 import java.util.Objects;
 import java.util.stream.Collectors;
@@ -55,7 +56,7 @@ public class BookingServiceImpl implements BookingService {
         Booking booking = BookingMapper.mapToModel(request);
         booking.setBooker(user);
         booking.setItem(item);
-        booking.setStatus(Status.WAITING);
+        booking.setBookingStatus(BookingStatus.WAITING);
 
         Booking savedBooking = bookingRepository.save(booking);
         return BookingMapper.mapToDto(savedBooking);
@@ -70,13 +71,13 @@ public class BookingServiceImpl implements BookingService {
         if (!Objects.equals(booking.getItem().getOwner().getId(), userId))
             throw new EntityNotFoundException("У вас нет доступа к данному букингу.");
 
-        if (!booking.getStatus().equals(Status.WAITING))
+        if (!booking.getBookingStatus().equals(BookingStatus.WAITING))
             throw new InvalidRequestException("Ошибка статуса букинга.");
 
         if (approved) {
-            booking.setStatus(Status.APPROVED);
+            booking.setBookingStatus(BookingStatus.APPROVED);
         } else {
-            booking.setStatus(Status.REJECTED);
+            booking.setBookingStatus(BookingStatus.REJECTED);
         }
 
         Booking savedBooking = bookingRepository.save(booking);
@@ -106,7 +107,7 @@ public class BookingServiceImpl implements BookingService {
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
         LocalDateTime dateNow = LocalDateTime.now();
-        State bookingState = State.toStateFromString(state)
+        BookingState bookingState = BookingState.toStateFromString(state)
                 .orElseThrow(() -> new InvalidRequestException("Unknown state: " + state));
 
         List<Booking> bookings;
@@ -121,10 +122,10 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findByBookerIdAndStartIsAfter(userId, dateNow, pageable);
                 break;
             case WAITING:
-                bookings = bookingRepository.findByBookerIdAndStartIsAfterAndStatusIs(userId, dateNow, pageable, Status.WAITING);
+                bookings = bookingRepository.findByBookerIdAndStartIsAfterAndStatusIs(userId, dateNow, pageable, BookingStatus.WAITING);
                 break;
             case REJECTED:
-                bookings = bookingRepository.findByBookerIdAndStartIsAfterAndStatusIs(userId, dateNow, pageable, Status.REJECTED);
+                bookings = bookingRepository.findByBookerIdAndStartIsAfterAndStatusIs(userId, dateNow, pageable, BookingStatus.REJECTED);
                 break;
             default:
                 bookings = bookingRepository.findAllByBookerId(userId, pageable);
@@ -143,14 +144,14 @@ public class BookingServiceImpl implements BookingService {
         }
         Pageable pageable = PageRequest.of(page, size, Sort.by("start").descending());
         LocalDateTime dateNow = LocalDateTime.now();
-        State bookingState = State.toStateFromString(state)
+        BookingState bookingState = BookingState.toStateFromString(state)
                 .orElseThrow(() -> new InvalidRequestException("Unknown state: " + state));
-        List<Long> itemIdList = itemRepository.findAllByOwnerId(user.getId())
+        List<Long> itemIdList = itemRepository.findAllByOwnerId(user.getId(), PageRequest.of(0, 20))
                 .stream()
                 .map(Item::getId)
                 .collect(Collectors.toList());
 
-        List<Booking> bookings;
+        List<Booking> bookings = new ArrayList<>();
         switch (bookingState) {
             case CURRENT:
                 bookings = bookingRepository.findByItemIdInAndStartIsBeforeAndEndIsAfter(itemIdList, dateNow, dateNow, pageable);
@@ -162,12 +163,12 @@ public class BookingServiceImpl implements BookingService {
                 bookings = bookingRepository.findByItemIdInAndStartIsAfter(itemIdList, dateNow, pageable);
                 break;
             case WAITING:
-                bookings = bookingRepository.findByItemIdInAndStartIsAfterAndStatusIs(itemIdList, dateNow, pageable, Status.WAITING);
+                bookings = bookingRepository.findByItemIdInAndStartIsAfterAndStatusIs(itemIdList, dateNow, pageable, BookingStatus.WAITING);
                 break;
             case REJECTED:
-                bookings = bookingRepository.findByItemIdInAndStartIsAfterAndStatusIs(itemIdList, dateNow, pageable, Status.REJECTED);
+                bookings = bookingRepository.findByItemIdInAndStartIsAfterAndStatusIs(itemIdList, dateNow, pageable, BookingStatus.REJECTED);
                 break;
-            default:
+            case ALL:
                 bookings = bookingRepository.findAllByItemIdIn(itemIdList, pageable);
                 break;
         }

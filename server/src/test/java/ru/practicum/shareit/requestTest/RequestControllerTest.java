@@ -1,8 +1,6 @@
 package ru.practicum.shareit.requestTest;
 
 import com.fasterxml.jackson.databind.ObjectMapper;
-import org.junit.jupiter.api.BeforeEach;
-import org.junit.jupiter.api.Nested;
 import org.junit.jupiter.api.Test;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.boot.test.autoconfigure.web.servlet.WebMvcTest;
@@ -17,16 +15,9 @@ import ru.practicum.shareit.request.controller.RequestController;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.service.RequestService;
 
-import javax.validation.ConstraintViolation;
-import javax.validation.Validation;
-import javax.validation.Validator;
-import javax.validation.ValidatorFactory;
 import java.time.LocalDateTime;
-import java.util.ArrayList;
 import java.util.List;
 
-import static org.junit.jupiter.api.Assertions.assertAll;
-import static org.junit.jupiter.api.Assertions.assertEquals;
 import static org.mockito.ArgumentMatchers.*;
 import static org.mockito.Mockito.doThrow;
 import static org.mockito.Mockito.when;
@@ -236,34 +227,34 @@ class RequestControllerTest {
                 .andExpect(MockMvcResultMatchers.status().isOk());
     }
 
-    @Nested
-    class ValidationUserTest {
-
-        Validator validator;
-
-        @BeforeEach
-        void beforeEach() {
-            try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
-                validator = validatorFactory.getValidator();
-            }
-        }
-
-        @Test
-        void addIncorrectRequest() {
-            RequestDto test = new RequestDto();
-
-            assertEquals(1, validator.validate(test).size());
-        }
-
-        @Test
-        void addRequestIncorrectDescription() {
-            RequestDto test = RequestDto.builder().description("").build();
-
-            List<ConstraintViolation<RequestDto>> validationSet = new ArrayList<>(validator.validate(test));
-            assertAll(
-                    () -> assertEquals(1, validationSet.size()),
-                    () -> assertEquals("must not be blank", validationSet.get(0).getMessage())
-            );
-        }
-    }
+//    @Nested
+//    class ValidationUserTest {
+//
+//        Validator validator;
+//
+//        @BeforeEach
+//        void beforeEach() {
+//            try (ValidatorFactory validatorFactory = Validation.buildDefaultValidatorFactory()) {
+//                validator = validatorFactory.getValidator();
+//            }
+//        }
+//
+//        @Test
+//        void addIncorrectRequest() {
+//            RequestDto test = new RequestDto();
+//
+//            assertEquals(1, validator.validate(test).size());
+//        }
+//
+//        @Test
+//        void addRequestIncorrectDescription() {
+//            RequestDto test = RequestDto.builder().description("").build();
+//
+//            List<ConstraintViolation<RequestDto>> validationSet = new ArrayList<>(validator.validate(test));
+//            assertAll(
+//                    () -> assertEquals(1, validationSet.size()),
+//                    () -> assertEquals("must not be blank", validationSet.get(0).getMessage())
+//            );
+//        }
+//    }
 }
