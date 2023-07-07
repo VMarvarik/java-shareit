@@ -40,7 +40,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
                 .body(response);
     }
 
-    @ExceptionHandler(value = {InvalidRequestException.class})
+    @ExceptionHandler(value = {NoCorrectRequestException.class})
     public ResponseEntity<Object> handleNoCorrectRequestException(final RuntimeException ex) {
         Map<String, Object> response = new LinkedHashMap<>();
 

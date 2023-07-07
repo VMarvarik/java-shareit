@@ -8,8 +8,8 @@ import org.springframework.http.client.HttpComponentsClientHttpRequestFactory;
 import org.springframework.stereotype.Service;
 import org.springframework.web.util.DefaultUriBuilderFactory;
 import ru.practicum.shareit.client.BaseClient;
-import ru.practicum.shareit.comment.RequestCommentDto;
-import ru.practicum.shareit.item.dto.ItemDtoForRequest;
+import ru.practicum.shareit.item.comment.CommentRequest;
+import ru.practicum.shareit.item.dto.ItemRequest;
 
 import java.util.Map;
 
@@ -27,7 +27,7 @@ public class ItemClient extends BaseClient {
         );
     }
 
-    public ResponseEntity<Object> getOwnerItems(Long userId, Integer from, Integer size) {
+    public ResponseEntity<Object> getAllItemsByUserId(Long userId, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "from", from,
                 "size", size
@@ -35,7 +35,7 @@ public class ItemClient extends BaseClient {
         return get("?from={from}&size={size}", userId, parameters);
     }
 
-    public ResponseEntity<Object> searchAvailableItems(Long userId, String text, Integer from, Integer size) {
+    public ResponseEntity<Object> searchItemByText(Long userId, String text, Integer from, Integer size) {
         Map<String, Object> parameters = Map.of(
                 "text", text,
                 "from", from,
@@ -44,19 +44,19 @@ public class ItemClient extends BaseClient {
         return get("/search/?text={text}&from={from}&size={size}", userId, parameters);
     }
 
-    public ResponseEntity<Object> addItem(Long userId, ItemDtoForRequest request) {
+    public ResponseEntity<Object> createItem(Long userId, ItemRequest request) {
         return post("", userId, request);
     }
 
-    public ResponseEntity<Object> getItem(Long userId, Long itemId) {
+    public ResponseEntity<Object> getItemById(Long userId, Long itemId) {
         return get("/" + itemId, userId);
     }
 
-    public ResponseEntity<Object> updateItem(Long userId, Long itemId, ItemDtoForRequest request) {
+    public ResponseEntity<Object> updateItemById(Long userId, Long itemId, ItemRequest request) {
         return patch("/" + itemId, userId, request);
     }
 
-    public ResponseEntity<Object> addComment(Long userId, Long itemId, RequestCommentDto request) {
+    public ResponseEntity<Object> createComment(Long userId, Long itemId, CommentRequest request) {
         return post("/" + itemId + "/comment", userId, request);
     }
 }

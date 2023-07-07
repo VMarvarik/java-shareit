@@ -1,19 +1,18 @@
-package ru.practicum.shareit.comment;
+package ru.practicum.shareit.item.comment;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import java.time.LocalDateTime;
 
-@Data
+@Getter
+@Setter
 @NoArgsConstructor
 @Builder
 @AllArgsConstructor
-public class ResponseCommentDto {
+public class CommentResponse {
     private Long id;
     private String text;
     private String authorName;
     private LocalDateTime created;
 }
+

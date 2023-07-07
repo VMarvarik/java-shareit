@@ -1,24 +1,22 @@
 package ru.practicum.shareit.user.dto;
 
-import lombok.AllArgsConstructor;
-import lombok.Builder;
-import lombok.Data;
-import lombok.NoArgsConstructor;
+import lombok.*;
 
 import javax.validation.constraints.Email;
 import javax.validation.constraints.NotBlank;
 
-@Data
+@Getter
+@Setter
+@NoArgsConstructor
 @Builder
 @AllArgsConstructor
-@NoArgsConstructor
 public class UserDto {
     private Long id;
 
-    @NotBlank(message = "Имя пользователя не может быть пустым.")
+    @NotBlank(message = "Name cannot be empty or null")
     private String name;
 
-    @NotBlank(message = "Электронная почта не может быть пустой.")
-    @Email(regexp = "^[a-zA-Z0-9_!#$%&'*+/=?`{|}~^.-]+@[a-zA-Z0-9.-]+$", message = "Электронная почта должна соответствовать формату RFC 5322.")
+    @NotBlank(message = "Email cannot empty or null")
+    @Email(regexp = "[\\w._]{1,10}@[\\w]{2,}.[\\w]{2,}", message = "Email is not format as email (email@email.com)")
     private String email;
 }
