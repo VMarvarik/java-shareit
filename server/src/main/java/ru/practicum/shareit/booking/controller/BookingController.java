@@ -19,14 +19,14 @@ public class BookingController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public ResponseBookingDto addBooking(@RequestHeader(REQUEST_HEADER) Long userId,
+    public ResponseBookingDto addBooking(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                          @RequestBody RequestBookingDto requestBookingDto) {
         return bookingService.addBooking(userId, requestBookingDto);
     }
 
     @PatchMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseBookingDto changeBookingStatus(@RequestHeader(REQUEST_HEADER) Long userId,
+    public ResponseBookingDto changeBookingStatus(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                                   @PathVariable(name = "bookingId") Long bookingId,
                                                   @RequestParam(name = "approved") Boolean approved) {
         return bookingService.updateStatus(bookingId, approved, userId);
@@ -34,14 +34,14 @@ public class BookingController {
 
     @GetMapping("/{bookingId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public ResponseBookingDto findBookingById(@RequestHeader(REQUEST_HEADER) Long userId,
+    public ResponseBookingDto findBookingById(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                               @PathVariable(name = "bookingId") Long bookingId) {
         return bookingService.findById(bookingId, userId);
     }
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<ResponseBookingDto> getAllBookingsByBooker(@RequestHeader(REQUEST_HEADER) Long userId,
+    public List<ResponseBookingDto> getAllBookingsByBooker(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                                            @RequestParam(name = "state", defaultValue = "ALL") String state,
                                                            @RequestParam(value = "from",
                                                                    defaultValue = "0") Integer from,
@@ -52,7 +52,7 @@ public class BookingController {
 
     @GetMapping("/owner")
     @ResponseStatus(code = HttpStatus.OK)
-    public List<ResponseBookingDto> getAllBookingsByOwner(@RequestHeader(REQUEST_HEADER) Long userId,
+    public List<ResponseBookingDto> getAllBookingsByOwner(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                                           @RequestParam(name = "state", defaultValue = "ALL") String state,
                                                           @RequestParam(value = "from",
                                                                   defaultValue = "0") Integer from,

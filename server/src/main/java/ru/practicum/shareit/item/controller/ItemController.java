@@ -24,7 +24,7 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
-    public ItemResponseDto addItem(@RequestHeader(REQUEST_HEADER) Long ownerId,
+    public ItemResponseDto addItem(@RequestHeader(name = REQUEST_HEADER) Long ownerId,
                                    @RequestBody ItemRequestDto itemRequestDto) {
         log.info("Добавление предмета");
         return itemService.addItem(itemRequestDto, ownerId);
@@ -32,14 +32,14 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/{id}")
-    public ItemResponseDto getItem(@RequestHeader(REQUEST_HEADER) Long ownerId, @PathVariable Long id) {
+    public ItemResponseDto getItem(@RequestHeader(name = REQUEST_HEADER) Long ownerId, @PathVariable Long id) {
         log.info("Вызов предмета");
         return itemService.getItem(id, ownerId);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping
-    public List<ItemResponseDto> getOwnerItems(@RequestHeader(REQUEST_HEADER) Long ownerId,
+    public List<ItemResponseDto> getOwnerItems(@RequestHeader(name = REQUEST_HEADER) Long ownerId,
                                                @RequestParam(value = "from",
                                                        defaultValue = "0") Integer from,
                                                @RequestParam(value = "size",
@@ -57,7 +57,7 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @PatchMapping("/{itemId}")
-    public ItemResponseDto updateItem(@RequestHeader(REQUEST_HEADER) Long ownerId,
+    public ItemResponseDto updateItem(@RequestHeader(name = REQUEST_HEADER) Long ownerId,
                                       @PathVariable(name = "itemId") Long itemId,
                                       @RequestBody ItemRequestDto itemRequestDto) {
         log.info("Обновление предмета");
@@ -66,7 +66,7 @@ public class ItemController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @PostMapping("/{itemId}/comment")
-    public ResponseCommentDto addComment(@RequestHeader(REQUEST_HEADER) Long userId,
+    public ResponseCommentDto addComment(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                          @PathVariable(name = "itemId") Long itemId,
                                          @RequestBody RequestCommentDto request) {
         log.info("Добавление комментария");

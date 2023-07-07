@@ -11,6 +11,7 @@ import lombok.NoArgsConstructor;
 @AllArgsConstructor
 public class ItemDtoForRequest {
     private Long id;
+    private Long owner;
     private String name;
     private String description;
     private Boolean available;

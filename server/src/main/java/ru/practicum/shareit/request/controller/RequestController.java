@@ -3,7 +3,6 @@ package ru.practicum.shareit.request.controller;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
-import ru.practicum.shareit.exception.InvalidRequestException;
 import ru.practicum.shareit.request.dto.RequestDto;
 import ru.practicum.shareit.request.service.RequestService;
 
@@ -19,34 +18,31 @@ public class RequestController {
 
     @PostMapping
     @ResponseStatus(code = HttpStatus.CREATED)
-    public RequestDto addItemRequest(@RequestHeader(REQUEST_HEADER) Long userId,
+    public RequestDto addItemRequest(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                      @RequestBody RequestDto requestDto) {
         return requestService.addRequest(requestDto, userId);
     }
 
     @GetMapping("/{requestId}")
     @ResponseStatus(code = HttpStatus.OK)
-    public RequestDto getItemRequestById(@RequestHeader(REQUEST_HEADER) Long userId,
+    public RequestDto getItemRequestById(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                          @PathVariable Long requestId) {
         return requestService.getRequestByUserId(userId, requestId);
     }
 
     @GetMapping
     @ResponseStatus(code = HttpStatus.OK)
-    public List<RequestDto> getAllItemRequests(@RequestHeader(REQUEST_HEADER) Long userId) {
+    public List<RequestDto> getAllItemRequests(@RequestHeader(name = REQUEST_HEADER) Long userId) {
         return requestService.getAllRequestsByUserId(userId);
     }
 
     @GetMapping("/all")
     @ResponseStatus(code = HttpStatus.OK)
-    public List<RequestDto> getItemRequestsByOtherUsers(@RequestHeader(REQUEST_HEADER) Long userId,
+    public List<RequestDto> getItemRequestsByOtherUsers(@RequestHeader(name = REQUEST_HEADER) Long userId,
                                                         @RequestParam(value = "from",
-                                                                defaultValue = "0", required = false) Integer from,
+                                                                defaultValue = "0") Integer from,
                                                         @RequestParam(value = "size",
-                                                                defaultValue = "10", required = false) Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
-        }
+                                                                defaultValue = "10") Integer size) {
         return requestService.getRequestsByOtherUsers(userId, from, size);
     }
 }

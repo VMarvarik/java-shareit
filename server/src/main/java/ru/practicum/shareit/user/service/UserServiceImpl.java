@@ -5,7 +5,6 @@ import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
 import ru.practicum.shareit.exception.EntityNotFoundException;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserDtoResponse;
 import ru.practicum.shareit.user.mapper.UserMapper;
 import ru.practicum.shareit.user.model.User;
 import ru.practicum.shareit.user.repository.UserRepository;
@@ -20,20 +19,20 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional
-    public UserDtoResponse addUser(UserDto userDto) {
+    public UserDto addUser(UserDto userDto) {
         User newUser = UserMapper.mapToModel(userDto);
         return UserMapper.mapToDto(userRepository.save(newUser));
     }
 
     @Override
     @Transactional(readOnly = true)
-    public List<UserDtoResponse> getUsers() {
+    public List<UserDto> getUsers() {
         return UserMapper.mapToDto(userRepository.findAll());
     }
 
     @Override
     @Transactional
-    public UserDtoResponse updateUser(UserDto request, Long id) {
+    public UserDto updateUser(UserDto request, Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден."));
 
@@ -50,7 +49,7 @@ public class UserServiceImpl implements UserService {
 
     @Override
     @Transactional(readOnly = true)
-    public UserDtoResponse getUser(Long id) {
+    public UserDto getUser(Long id) {
         User user = userRepository.findById(id)
                 .orElseThrow(() -> new EntityNotFoundException("Пользователь не найден."));
         return UserMapper.mapToDto(user);

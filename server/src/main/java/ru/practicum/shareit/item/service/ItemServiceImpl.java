@@ -92,9 +92,13 @@ public class ItemServiceImpl implements ItemService {
 
         List<Booking> bookingList = bookingService.getAllByItemIdIn(itemsId);
 
-        return dtos
+        dtos = dtos
                 .stream()
                 .map(itemsDto -> setLastAndNextBookings(bookingList, itemsDto))
+                .collect(Collectors.toList());
+
+        return dtos
+                .stream()
                 .sorted(Comparator.comparing(ItemResponseDto::getId))
                 .collect(Collectors.toList());
     }
@@ -176,7 +180,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .filter(booking -> Objects.equals(booking.getItem().getId(), itemResponseDto.getId()))
                 .sorted(Comparator.comparing(Booking::getEnd).reversed())
-                .filter(booking -> booking.getBookingStatus().equals(BookingStatus.APPROVED))
+                .filter(booking -> booking.getStatus().equals(BookingStatus.APPROVED))
                 .filter(booking -> booking.getStart().isBefore(dateTime))
                 .limit(1)
                 .findAny()
@@ -189,7 +193,7 @@ public class ItemServiceImpl implements ItemService {
                 .stream()
                 .filter(booking -> Objects.equals(booking.getItem().getId(), itemResponseDto.getId()))
                 .sorted(Comparator.comparing(Booking::getStart))
-                .filter(booking -> booking.getBookingStatus().equals(BookingStatus.APPROVED))
+                .filter(booking -> booking.getStatus().equals(BookingStatus.APPROVED))
                 .filter(booking -> booking.getStart().isAfter(dateTime))
                 .limit(1)
                 .findAny()

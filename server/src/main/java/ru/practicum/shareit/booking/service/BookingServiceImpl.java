@@ -45,18 +45,13 @@ public class BookingServiceImpl implements BookingService {
             throw new InvalidRequestException("Вещь не доступна для бронирования.");
         }
 
-        if (request.getEnd().isBefore(request.getStart()) ||
-                request.getEnd().equals(request.getStart())) {
-            throw new InvalidRequestException("Время ьбронирования не отвечает требованиям.");
-        }
-
         if (Objects.equals(item.getOwner().getId(), bookerId))
             throw new EntityNotFoundException("Невозможно забронировать свою же вещь.");
 
         Booking booking = BookingMapper.mapToModel(request);
         booking.setBooker(user);
         booking.setItem(item);
-        booking.setBookingStatus(BookingStatus.WAITING);
+        booking.setStatus(BookingStatus.WAITING);
 
         Booking savedBooking = bookingRepository.save(booking);
         return BookingMapper.mapToDto(savedBooking);
@@ -71,13 +66,13 @@ public class BookingServiceImpl implements BookingService {
         if (!Objects.equals(booking.getItem().getOwner().getId(), userId))
             throw new EntityNotFoundException("У вас нет доступа к данному букингу.");
 
-        if (!booking.getBookingStatus().equals(BookingStatus.WAITING))
+        if (!booking.getStatus().equals(BookingStatus.WAITING))
             throw new InvalidRequestException("Ошибка статуса букинга.");
 
         if (approved) {
-            booking.setBookingStatus(BookingStatus.APPROVED);
+            booking.setStatus(BookingStatus.APPROVED);
         } else {
-            booking.setBookingStatus(BookingStatus.REJECTED);
+            booking.setStatus(BookingStatus.REJECTED);
         }
 
         Booking savedBooking = bookingRepository.save(booking);
@@ -110,7 +105,7 @@ public class BookingServiceImpl implements BookingService {
         BookingState bookingState = BookingState.toStateFromString(state)
                 .orElseThrow(() -> new InvalidRequestException("Unknown state: " + state));
 
-        List<Booking> bookings;
+        List<Booking> bookings = new ArrayList<>();
         switch (bookingState) {
             case CURRENT:
                 bookings = bookingRepository.findByBookerIdAndStartIsBeforeAndEndIsAfter(userId, dateNow, dateNow, pageable);
@@ -127,7 +122,7 @@ public class BookingServiceImpl implements BookingService {
             case REJECTED:
                 bookings = bookingRepository.findByBookerIdAndStartIsAfterAndStatusIs(userId, dateNow, pageable, BookingStatus.REJECTED);
                 break;
-            default:
+            case ALL:
                 bookings = bookingRepository.findAllByBookerId(userId, pageable);
                 break;
         }

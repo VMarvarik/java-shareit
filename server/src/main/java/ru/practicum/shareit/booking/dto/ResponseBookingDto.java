@@ -16,7 +16,7 @@ public class ResponseBookingDto {
     private LocalDateTime end;
     private Booker booker;
     private Item item;
-    private BookingStatus bookingStatus;
+    private BookingStatus status;
 
     @Data
     @Builder

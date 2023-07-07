@@ -27,7 +27,7 @@ public class Booking {
     @Column(name = "end_date", nullable = false)
     private LocalDateTime end;
 
-    @ManyToOne(cascade = CascadeType.PERSIST)
+    @ManyToOne
     @JoinColumn(name = "item_id", referencedColumnName = "id")
     private Item item;
 
@@ -36,5 +36,5 @@ public class Booking {
     private User booker;
 
     @Enumerated(EnumType.STRING)
-    private BookingStatus bookingStatus;
+    private BookingStatus status;
 }

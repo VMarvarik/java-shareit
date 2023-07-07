@@ -27,9 +27,9 @@ public class UserController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/{id}")
-    public ResponseEntity<Object> getUser(@PathVariable Long id) {
+    public ResponseEntity<Object> getUser(@PathVariable Long userId) {
         log.info("Вызов пользователя");
-        return userClient.getUser(id);
+        return userClient.getUser(userId);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
@@ -41,15 +41,15 @@ public class UserController {
 
     @ResponseStatus(code = HttpStatus.OK)
     @PatchMapping("/{id}")
-    public ResponseEntity<Object> updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+    public ResponseEntity<Object> updateUser(@RequestBody UserDto userDto, @PathVariable Long userId) {
         log.info("Обновление пользователя");
-        return userClient.updateUser(id, userDto);
+        return userClient.updateUser(userId, userDto);
     }
 
     @DeleteMapping("/{id}")
     @ResponseStatus(code = HttpStatus.OK)
-    public void deleteUser(@PathVariable Long id) {
+    public void deleteUser(@PathVariable Long userId) {
         log.info("Удаление пользователя");
-        userClient.deleteUser(id);
+        userClient.deleteUser(userId);
     }
 }

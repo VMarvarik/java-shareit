@@ -5,7 +5,6 @@ import lombok.extern.slf4j.Slf4j;
 import org.springframework.http.HttpStatus;
 import org.springframework.web.bind.annotation.*;
 import ru.practicum.shareit.user.dto.UserDto;
-import ru.practicum.shareit.user.dto.UserDtoResponse;
 import ru.practicum.shareit.user.service.UserService;
 
 import java.util.List;
@@ -19,28 +18,28 @@ public class UserController {
 
     @ResponseStatus(code = HttpStatus.CREATED)
     @PostMapping
-    public UserDtoResponse addUser(@RequestBody UserDto userDto) {
+    public UserDto addUser(@RequestBody UserDto userDto) {
         log.info("Добавление пользователя");
         return userService.addUser(userDto);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping("/{id}")
-    public UserDtoResponse getUser(@PathVariable Long id) {
+    public UserDto getUser(@PathVariable Long id) {
         log.info("Вызов пользователя");
         return userService.getUser(id);
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @GetMapping
-    public List<UserDtoResponse> getUsers() {
+    public List<UserDto> getUsers() {
         log.info("Вызов всех пользователей");
         return userService.getUsers();
     }
 
     @ResponseStatus(code = HttpStatus.OK)
     @PatchMapping("/{id}")
-    public UserDtoResponse updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
+    public UserDto updateUser(@RequestBody UserDto userDto, @PathVariable Long id) {
         log.info("Обновление пользователя");
         return userService.updateUser(userDto, id);
     }
