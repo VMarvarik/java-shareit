@@ -32,9 +32,6 @@ public class BookingController {
                                                          @RequestParam(name = "state", defaultValue = "all") String state,
                                                          @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                          @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
-        }
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new InvalidRequestException("Unknown state: " + state));
         return bookingClient.getAllByBooker(userId, bookingState, from, size);
@@ -72,9 +69,6 @@ public class BookingController {
                                                         @RequestParam(name = "state", defaultValue = "all") String state,
                                                         @PositiveOrZero @RequestParam(name = "from", defaultValue = "0") Integer from,
                                                         @Positive @RequestParam(name = "size", defaultValue = "10") Integer size) {
-        if (size <= 0 || from < 0) {
-            throw new InvalidRequestException("Недопустимые значения параматеров size или from");
-        }
         BookingState bookingState = BookingState.from(state)
                 .orElseThrow(() -> new InvalidRequestException("Unknown state: " + state));
 

@@ -2,6 +2,7 @@ package ru.practicum.shareit.item;
 
 import lombok.RequiredArgsConstructor;
 import lombok.extern.slf4j.Slf4j;
+import org.springframework.http.HttpStatus;
 import org.springframework.http.ResponseEntity;
 import org.springframework.validation.annotation.Validated;
 import org.springframework.web.bind.annotation.*;
@@ -22,6 +23,7 @@ public class ItemController {
     private final ItemClient itemClient;
 
     @GetMapping
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> getOwnerItems(@RequestHeader(name = USER_ID_HEADER) Long userId,
                                                 @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                                 @RequestParam(defaultValue = "10") @Min(1) Integer size) {
@@ -30,6 +32,7 @@ public class ItemController {
     }
 
     @PostMapping
+    @ResponseStatus(code = HttpStatus.CREATED)
     public ResponseEntity<Object> addItem(@RequestHeader(name = USER_ID_HEADER) Long userId,
                                           @RequestBody @Valid ItemRequestDto request) {
         log.info("Добавление предмета");
@@ -37,12 +40,14 @@ public class ItemController {
     }
 
     @GetMapping("/{itemId}")
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> getItem(@RequestHeader(name = USER_ID_HEADER) Long userId, @PathVariable Long itemId) {
         log.info("Вызов предмета");
         return itemClient.getItem(userId, itemId);
     }
 
     @PatchMapping("/{itemId}")
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> updateItem(@RequestHeader(USER_ID_HEADER) Long userId, @PathVariable Long itemId,
                                              @RequestBody ItemRequestDto request) {
         log.info("Обновление предмета");
@@ -50,6 +55,7 @@ public class ItemController {
     }
 
     @GetMapping("/search")
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> searchAvailableItems(@RequestHeader(name = USER_ID_HEADER) Long userId, @RequestParam String text,
                                                        @RequestParam(defaultValue = "0") @Min(0) Integer from,
                                                        @RequestParam(defaultValue = "10") @Min(1) Integer size) {
@@ -58,6 +64,7 @@ public class ItemController {
     }
 
     @PostMapping("/{itemId}/comment")
+    @ResponseStatus(code = HttpStatus.OK)
     public ResponseEntity<Object> addComment(@RequestHeader(name = USER_ID_HEADER) Long userId, @PathVariable Long itemId,
                                              @RequestBody @Valid RequestCommentDto request) {
         log.info("Добавление комментария");

@@ -18,7 +18,7 @@ import java.util.Map;
 @Slf4j
 @RestControllerAdvice
 public class ErrorHandler extends ResponseEntityExceptionHandler {
-
+    private final String DATE_TIME_FORMAT = "yyyy-MM-dd HH:mm:ss";
     @Override
     protected ResponseEntity<Object> handleMethodArgumentNotValid(
             MethodArgumentNotValidException ex,
@@ -26,7 +26,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
 
         Map<String, Object> response = new LinkedHashMap<>();
 
-        response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         response.put("status", HttpStatus.BAD_REQUEST.name());
 
         Map<String, Object> errors = new LinkedHashMap<>();
@@ -44,7 +44,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleNoCorrectRequestException(final RuntimeException ex) {
         Map<String, Object> response = new LinkedHashMap<>();
 
-        response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         response.put("status", HttpStatus.BAD_REQUEST.name());
         response.put("error", ex.getMessage());
 
@@ -57,7 +57,7 @@ public class ErrorHandler extends ResponseEntityExceptionHandler {
     public ResponseEntity<Object> handleException(final Exception ex) {
         Map<String, Object> response = new LinkedHashMap<>();
 
-        response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern("yyyy-MM-dd HH:mm:ss")));
+        response.put("timestamp", LocalDateTime.now().format(DateTimeFormatter.ofPattern(DATE_TIME_FORMAT)));
         response.put("status", HttpStatus.INTERNAL_SERVER_ERROR.name());
         response.put("message", "Непредвиденная ошибка: " + ex.getMessage());
 
